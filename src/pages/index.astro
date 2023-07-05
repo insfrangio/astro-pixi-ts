@@ -1,53 +1,106 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Welcome to Astro.">
-	<main id="main">
-		<h1 class="title">ASTRO + PIXI + TS</h1>
-		<canvas id="canvas"></canvas>
-	</main>
+  <main id="main">
+    <h1 class="title">Clock exact time</h1>
+    <canvas id="canvas"></canvas>
+  </main>
 </Layout>
 
-
 <style>
-	.title {
-		font-size: 1rem;
-	}
+  .title {
+    font-size: 1rem;
+  }
 </style>
 
 <script>
-	import * as PIXI from 'pixi.js';
-		  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-      let app = new PIXI.Application({ view: canvas, width: 640, height: 360 , background: '#1099bb'});
+  import * as PIXI from "pixi.js";
+
+  // Get the canvas element from the DOM.
+  const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+
+  // Create the PIXI Application.
+  const app = new PIXI.Application({
+    view: canvas,
+    resolution: window.devicePixelRatio || 1,
+    autoDensity: true,
+    width: 640,
+    height: 360,
+    background: "#1099bb",
+  });
+
+  // Add the application to the DOM.
+  (window as any).__PIXI_APP__ = app;
+
+  // Create a new container
+  const container = new PIXI.Container();
+
+  // Centralizate element in the screen
+  container.position.set(app.screen.width / 2, app.screen.height / 2);
+  container.pivot.set(container.width / 2, container.height / 2);
+
+  // Text
+  const text = new PIXI.Text("", {
+    fontFamily: "Arial",
+    fontSize: 24,
+    fill: 0xffffff,
+  });
+  text.position.set(-50, 100);
+  container.addChild(text);
+
+  // Background clock */
+  const clockBackground = PIXI.Sprite.from("clock-background.png");
+  clockBackground.anchor.set(0.5);
+  clockBackground.width = 200;
+  clockBackground.height = 200;
+  container.addChild(clockBackground);
+
+  // Hour pointer
+  const pointerHour = PIXI.Sprite.from("hour-pointer.png");
+  pointerHour.anchor.set(0.5, 0.85);
+  container.addChild(pointerHour);
+
+  // Minute pointer
+  const pointerMinute = PIXI.Sprite.from("minute-pointer.png");
+  pointerMinute.anchor.set(0.5, 0.85);
+  container.addChild(pointerMinute);
+
+  // Second pointer
+  const pointerSecond = PIXI.Sprite.from("second-pointer.png");
+  pointerSecond.anchor.set(0.5, 0.905);
+  container.addChild(pointerSecond);
+
+  /* Create visual elements */
+
+  // Add the container to the stage PIXI application
+  app.stage.addChild(container);
 
 
-	  const container = new PIXI.Container();
 
-app.stage.addChild(container);
+  function updateTime() {
+    const date = new Date();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
 
-// Create a new texture
-const texture = PIXI.Texture.from('hour-pointer.png');
+    const hourAngle = (Math.PI / 6) * hours + (Math.PI / 360) * minutes;
+    const minuteAngle = (Math.PI / 30) * minutes + (Math.PI / 1800) * seconds;
+    const secondAngle = (Math.PI / 30) * seconds;
 
-    const pointer = new PIXI.Sprite(texture);
-    pointer.anchor.set(0);
-    pointer.x = 0;
-    pointer.y = 0;
-    container.addChild(pointer);
+    pointerHour.rotation = hourAngle;
+    pointerMinute.rotation = minuteAngle;
+    pointerSecond.rotation = secondAngle;
 
-container.x = app.screen.width / 2;
-container.y = app.screen.height / 2;
+    text.text = `${hours}:${minutes}:${seconds}`;
+  }
 
+  // Add a ticker callback to update the time every second
+  app.ticker.add(updateTime);
 
-container.pivot.x = container.width / 2;
-container.pivot.y = container.height / 2;
-
-// Listen for animate update
-app.ticker.add((delta) => {
-    // rotate the container!
-    // use delta to create frame-independent transform
-    container.rotation -= 0.05 * delta;
-});
-
-
+  // app.ticker.add((delta) => {
+  //   // use delta to create frame-independent transform
+  //   pointerHour.rotation += 0.05 * delta;
+  // });
 </script>
