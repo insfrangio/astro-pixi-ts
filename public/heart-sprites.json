@@ -1,0 +1,75 @@
+{"frames": {
+
+"1.png":
+{
+	"frame": {"x":0,"y":0,"w":200,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+	"sourceSize": {"w":200,"h":200},
+	"borders": {"left":50,"top":50,"right":50,"bottom":50}
+},
+"2.png":
+{
+	"frame": {"x":200,"y":0,"w":200,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+	"sourceSize": {"w":200,"h":200},
+	"borders": {"left":50,"top":50,"right":50,"bottom":50}
+},
+"3.png":
+{
+	"frame": {"x":400,"y":0,"w":200,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+	"sourceSize": {"w":200,"h":200},
+	"borders": {"left":50,"top":50,"right":50,"bottom":50}
+},
+"4.png":
+{
+	"frame": {"x":600,"y":0,"w":200,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+	"sourceSize": {"w":200,"h":200},
+	"borders": {"left":50,"top":50,"right":50,"bottom":50}
+},
+"5.png":
+{
+	"frame": {"x":800,"y":0,"w":200,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+	"sourceSize": {"w":200,"h":200},
+	"borders": {"left":50,"top":50,"right":50,"bottom":50}
+},
+"6.png":
+{
+	"frame": {"x":1000,"y":0,"w":200,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+	"sourceSize": {"w":200,"h":200},
+	"borders": {"left":50,"top":50,"right":50,"bottom":50}
+},
+"7.png":
+{
+	"frame": {"x":1200,"y":0,"w":200,"h":200},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":200,"h":200},
+	"sourceSize": {"w":200,"h":200},
+	"borders": {"left":50,"top":50,"right":50,"bottom":50}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "heart-sprites.png",
+	"format": "RGBA8888",
+	"size": {"w":1400,"h":200},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d81e3917dab50eaac0cb3e4df289cf42:a0334c994329dd207705de507eae3662:76bd126b255b20bb8e05d203e8eef3ef$"
+}
+}

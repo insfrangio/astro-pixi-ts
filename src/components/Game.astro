@@ -1,0 +1,208 @@
+---
+---
+
+<main id="main">
+  <h1 class="title">Clock exact time</h1>
+  <canvas id="canvas"></canvas>
+  <button id="button">Animate!</button>
+</main>
+
+<style>
+  .title {
+    font-size: 1rem;
+  }
+</style>
+
+<script>
+  import {
+    Application,
+    Text,
+    Sprite,
+    Container,
+    Assets,
+    Spritesheet,
+    BaseTexture,
+    Texture,
+    AnimatedSprite,
+  } from "pixi.js";
+
+  import * as TWEEEN from "@tweenjs/tween.js";
+  import { Tween, Easing } from "@tweenjs/tween.js";
+  import { getHoursAngle } from "../utils/getHoursAngle";
+  import { getMinutesAngle } from "../utils/getMinutesAngle";
+  import { getSecondsAngle } from "../utils/getSecondsAngle";
+
+  Assets.addBundle("cloksAssets", {
+    clockBackground: "clock-background.png",
+    pointerHour: "hour-pointer.png",
+    pointerMinute: "minute-pointer.png",
+    pointerSecond: "second-pointer.png",
+    spritesheetAssets: "cucu.json",
+  });
+  const assets = await Assets.loadBundle("cloksAssets");
+
+  // Get the canvas element from the DOM.
+  const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+  const button = document.getElementById("button") as HTMLButtonElement;
+
+  // Create the PIXI Application.
+  const app = new Application({
+    view: canvas,
+    resolution: window.devicePixelRatio || 1,
+    autoDensity: true,
+    width: 640,
+    height: 360,
+    background: "#1099bb",
+  });
+
+  // Add the application to the DOM.
+  (window as any).__PIXI_APP__ = app;
+
+  // Create a new container
+  const container = new Container();
+
+  // Centralizate element in the screen
+  container.position.set(app.screen.width / 2, app.screen.height / 2);
+  container.pivot.set(container.width / 2, container.height / 2);
+
+  // Text
+  const text = new Text("hola", {
+    fontFamily: "Arial",
+    fontSize: 24,
+    fill: 0xffffff,
+  });
+  text.position.set(-50, 100);
+
+  // Background clock
+  const clockBackground = Sprite.from(assets.clockBackground);
+  clockBackground.anchor.set(0.5);
+  clockBackground.width = 200;
+  clockBackground.height = 200;
+
+  // Hour pointer
+  const pointerHour = Sprite.from(assets.pointerHour);
+  pointerHour.anchor.set(0.5, 0.85);
+
+  // Minute pointer
+  const pointerMinute = Sprite.from(assets.pointerMinute);
+  pointerMinute.anchor.set(0.5, 0.85);
+
+  // Second pointer
+  const pointerSecond = Sprite.from(assets.pointerSecond);
+  pointerSecond.anchor.set(0.5, 0.905);
+
+  //   console.log(assets.spritesheetAssets.data.meta.image);
+
+  const frames = [];
+
+  for (let i = 1; i <= 23; i++) {
+    // const val = i < 20 ? `${i}` : i;
+    console.log(i);
+
+    // magically works since the spritesheet was loaded with the pixi loader
+    frames.push(Texture.from(`cuckoo${i}.png`));
+  }
+
+  const anim = new AnimatedSprite(frames);
+
+  anim.x = app.screen.width / 2;
+  anim.y = app.screen.height / 2;
+  anim.anchor.set(0.5);
+  anim.animationSpeed = 0.25;
+  anim.loop = false;
+  // anim.play();
+
+  app.stage.addChild(anim);
+
+  /* Create visual elements */
+
+  // Add the container to the stage PIXI application
+  app.stage.addChild(container);
+
+  //   container.addChild(
+  //     text,
+  //     clockBackground,
+  //     pointerHour,
+  //     pointerMinute,
+  //     pointerSecond
+  //   );
+
+  let animationToTimes = {
+    hours: 4,
+    minutes: 35,
+    seconds: 10,
+  };
+
+  // Iniciar la animación
+  const startRotationHours = getHoursAngle(animationToTimes.hours);
+  const targetRotationHours = startRotationHours + Math.PI * 9; // 4 vueltas completas en radianes
+
+  const startRotationMinutes = getMinutesAngle(animationToTimes.minutes);
+  const targetRotationMinutes = startRotationMinutes + Math.PI * 9; // 4 vueltas completas en radianes
+
+  const startRotationSeconds = getSecondsAngle(animationToTimes.seconds);
+  const targetRotationSeconds = startRotationSeconds + Math.PI * 9; // 4 vueltas completas en radianes
+
+  let flag = true;
+
+  function initialStartRotation(hour: number, minute: number, second: number) {
+    pointerHour.rotation = getHoursAngle(2);
+    pointerMinute.rotation = getMinutesAngle(15);
+    pointerSecond.rotation = getSecondsAngle(55);
+  }
+
+  initialStartRotation(2, 15, 55);
+
+  const tweenHour = new Tween(pointerHour, false)
+    .to({ rotation: targetRotationHours }, 4000) // Duración de la animación en milisegundos
+    .easing(Easing.Quadratic.InOut) // Easing para suavizar la animación
+    .onComplete(() => {
+      flag = true;
+      console.log("Animación finalizo");
+
+      animationToTimes = {
+        hours: 6,
+        minutes: 44,
+        seconds: 11,
+      };
+    });
+
+  const tweenMinutes = new Tween(pointerMinute, false)
+    .to({ rotation: targetRotationMinutes }, 3000) // Duración de la animación en milisegundos
+    .easing(Easing.Quadratic.InOut) // Easing para suavizar la animación
+    .onComplete(() => {
+      // Callback cuando se completa la animación
+    })
+    .start();
+
+  const tweenSeconds = new Tween(pointerSecond, false)
+    .to({ rotation: targetRotationSeconds }, 2500) // Duración de la animación en milisegundos
+    .easing(Easing.Quadratic.InOut) // Easing para suavizar la animación
+    .onComplete(() => {
+      // Callback cuando se completa la animación
+    });
+
+  function changeFlagButton() {
+    anim.play();
+
+    // if (flag) {
+    //   return (flag = false);
+    // }
+
+    // flag = true;
+  }
+
+  function startAnimation() {
+    tweenHour.update();
+    tweenMinutes.update();
+    tweenSeconds.update();
+  }
+
+  app.ticker.add(() => {
+    if (flag) return;
+
+    startAnimation();
+  });
+
+  button.addEventListener("click", changeFlagButton);
+</script>
