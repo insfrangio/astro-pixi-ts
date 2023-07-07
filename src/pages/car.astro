@@ -1,0 +1,90 @@
+<script>
+  import {
+    Application,
+    Text,
+    Sprite,
+    Container,
+    Assets,
+    Spritesheet,
+    BaseTexture,
+    Texture,
+    AnimatedSprite,
+  } from "pixi.js";
+
+  const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+  const app = new Application({
+    view: canvas,
+    resolution: window.devicePixelRatio || 1,
+    autoDensity: true,
+    width: 640,
+    height: 360,
+    background: "#2C4251",
+  });
+  (window as any).__PIXI_APP__ = app;
+
+  //BG
+  //   const background = Sprite.from("carRace/bridge.png");
+  //   background.width = app.screen.width;
+  //   background.height = app.screen.height / 1.25;
+  //   background.y = 73;
+  //   app.stage.addChild(background);
+
+  const container = new Container();
+  const sprites: any = [];
+  let speed = 2;
+  app.stage.addChild(container);
+
+  const createSprite = (i: number) => {
+    const sprite = Sprite.from("carRace/bambooBridge.png");
+    sprite.width = app.screen.width;
+    sprite.height = app.screen.height;
+
+    sprite.x = sprite.width * i;
+    sprite.y = 0;
+    container.addChild(sprite);
+    sprites.push(sprite);
+  };
+
+  const move = (sprite: any, offset: any) => {
+    const spriteRightX = sprite.x + sprite.width;
+    const screenLeftX = 0;
+
+    if (spriteRightX <= screenLeftX) {
+      sprite.x += sprite.width * sprites.length;
+    }
+
+    sprite.x -= offset;
+  };
+
+  for (let i = 0; i < 3; i++) {
+    createSprite(i);
+  }
+
+  //BG
+
+  //tick //
+  app.ticker.add((dt) => {
+    if (sprites.length === 0) return;
+    const offset = speed * dt;
+    sprites.forEach((sprite: any) => {
+      move(sprite, offset);
+    });
+  });
+  //tick //
+</script>
+
+<div id="wrapper">
+  <canvas id="canvas"></canvas>
+</div>
+
+<style>
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  canvas {
+    border-radius: 25px;
+  }
+</style>
